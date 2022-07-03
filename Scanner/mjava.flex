@@ -124,7 +124,7 @@ SingleCharacter = [^\r\n\'\\]
   ">="                           { return symbol(GTEQ); }
   "!="                           { return symbol(NOTEQ); }
   "&&"                           { return symbol(ANDAND); }
-  "&"          			   { return symbol(AT); }
+  "&"          			             { return symbol(AT); }
   "||"                           { return symbol(OROR); } 
   "+"                            { return symbol(PLUS); }
   "-"                            { return symbol(MINUS); }

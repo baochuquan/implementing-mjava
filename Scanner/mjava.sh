@@ -15,4 +15,4 @@ if [ $? != 0 ]; then
 fi
 
 echo "===== step 3 ====="
-java -classpath ../third-part/CUP/java-cup-11a-runtime.jar Scanner SampleProgram.mjava
+java -classpath ../third-part/CUP/java-cup-11a-runtime.jar:. Scanner SampleProgram.mjava
