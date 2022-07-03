@@ -1,2 +1,5 @@
-Scanner/Scanner.class
 *.class
+LexicalAnalysis/Scanner.java
+Parsing/sym.java
+Parsing/mjavac.java
+Parsing/Scanner.java
