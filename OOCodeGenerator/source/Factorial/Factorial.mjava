@@ -1,0 +1,37 @@
+public class String{
+}
+
+public class Fac {
+
+    public Fac(){
+    }
+
+    public int ComputeFac(int num){
+	int aux ;
+	aux = 1;
+
+	while (num > 1) { aux = aux * num ;
+	    			num = num - 1 ;
+	}
+	return aux ;
+    }
+}
+
+public class Factorial{
+    public void main(){
+	String s1, s2, s3;
+	int n;
+	int r;
+	Fac f;
+
+	s1 = "Enter an integer value: ";
+	s2 = "%d";
+	s3 = " Fact(%d)= %d\n";
+
+	printf(s1);
+	scanf(s2, &n);
+	f = new Fac();
+	r = f.ComputeFac(n);
+	printf(s3, n, r);
+    }
+}

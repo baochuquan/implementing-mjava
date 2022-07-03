@@ -1,0 +1,9 @@
+public class String{
+}
+
+public class Hello{
+    public void main(){
+
+	printf("Hello world\n");
+    }
+}
