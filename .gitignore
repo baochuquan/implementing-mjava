@@ -12,3 +12,7 @@ ErrorHandling/Scanner.java
 SymbolTable/sym.java
 SymbolTable/mjavac.java
 SymbolTable/Scanner.java
+
+Types/sym.java
+Types/mjavac.java
+Types/Scanner.java
