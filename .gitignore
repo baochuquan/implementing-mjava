@@ -1,5 +1,10 @@
 *.class
 LexicalAnalysis/Scanner.java
+
 Parsing/sym.java
 Parsing/mjavac.java
 Parsing/Scanner.java
+
+ErrorHandling/sym.java
+ErrorHandling/mjavac.java
+ErrorHandling/Scanner.java
