@@ -33,7 +33,7 @@ parser code  {:
     if (info instanceof String){
 	errors++; 
       System.err.println("  "+ errors + "==> " + info + " "+ message + 
-					"\n       Parsing resumed from 2nd token before" + s.current_lexeme()+"\n");
+					"\n       Parsing resumed from 2nd token before " + s.current_lexeme()+"\n");
     }
     else {
     	StringBuffer m = new StringBuffer("Error ");

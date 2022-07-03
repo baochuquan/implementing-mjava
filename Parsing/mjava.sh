@@ -23,3 +23,9 @@ java -classpath ../third-part/CUP/java-cup-11a.jar:. mjavac SampleProgram.mjava
 if [ $? != 0 ]; then
   exit 1
 fi
+
+# echo "===== test ====="
+# java -classpath ../third-part/CUP/java-cup-11a.jar:. mjavac ../ErrorHandling/ErroneousProgram.mjava
+# if [ $? != 0 ]; then
+#   exit 1
+# fi

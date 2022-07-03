@@ -36,6 +36,10 @@ import java_cup.runtime.*;
   private Symbol symbol(int type, Object value) {
     return new Symbol(type, yyline+1, yycolumn+1, value);
   }
+
+  public String current_lexeme() {
+    return "(line: " + (yyline+1) + ", column: " + (yycolumn+1) + ", lexeme: \'" + yytext() + "\')";
+  }
 %}
 
 /* main character classes */
