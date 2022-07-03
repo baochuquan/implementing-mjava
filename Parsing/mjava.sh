@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "===== step 1 ====="
-java -classpath ../third-part/JFlex/jflex-1.8.2/lib/jflex-full-1.8.2.jar jflex.Main *.flex
+java -classpath ../third-part/JFlex/jflex-1.4.3/lib/JFlex.jar JFlex.Main *.flex
 if [ $? != 0 ]; then
   exit 1
 fi
