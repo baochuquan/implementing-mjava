@@ -8,3 +8,7 @@ Parsing/Scanner.java
 ErrorHandling/sym.java
 ErrorHandling/mjavac.java
 ErrorHandling/Scanner.java
+
+SymbolTable/sym.java
+SymbolTable/mjavac.java
+SymbolTable/Scanner.java
