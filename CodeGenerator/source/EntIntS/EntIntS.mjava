@@ -1,0 +1,15 @@
+public class String{
+}
+
+public class EntInt{
+    public void main(){
+	int n;
+	String s;
+	s = "Enter an integer: ";
+	printf (s);
+	s = "%d";
+	scanf (s, &n);
+	s = "You entered: %d\n";
+	printf(s, n);
+    }
+}

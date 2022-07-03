@@ -16,3 +16,11 @@ SymbolTable/Scanner.java
 Types/sym.java
 Types/mjavac.java
 Types/Scanner.java
+
+TypeChecking/sym.java
+TypeChecking/mjavac.java
+TypeChecking/Scanner.java
+
+CodeGenerator/sym.java
+CodeGenerator/mjavac.java
+CodeGenerator/Scanner.java
