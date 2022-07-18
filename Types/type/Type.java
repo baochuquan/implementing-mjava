@@ -129,6 +129,8 @@ public class Type {
 
     public static Name putName(String name, String supername, Env e) {
         Name n = (Name) types.get("" + NAME + name);
+        if (n != null)
+            return n;
         n = new Name(name, supername, e);
         types.put(n.toString(), n);
         return n;
