@@ -1,0 +1,34 @@
+public class String {
+}
+
+public class Int {
+
+    int n;
+
+    public Int(int i) {
+        n = i;
+    }
+
+    public int f() {
+        return fact(n);
+    }
+
+    int fact(int n) {
+        return n > 2 ? n * fact(n - 1) : n;
+    }
+
+}
+
+public class Test {
+    public void main(){
+	int n, f;
+	Int t;
+	n = 0;
+	while(n < 1 || n > 16) { printf ("Enter an integer greater than 0 and less than 17: ");	
+		    			 scanf ("%d", &n);
+	}
+	t = new Int(n);
+	f = t.f();	
+	printf("factorial(%d)= %d\n", n, f);
+    }
+}

@@ -18,8 +18,14 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
+# echo "===== step 4 ====="
+# java -classpath ../third-part/CUP/java-cup-11a.jar:. mjavac WrongProgram.mjava
+# if [ $? != 0 ]; then
+#   exit 1
+# fi
+
 echo "===== step 4 ====="
-java -classpath ../third-part/CUP/java-cup-11a.jar:. mjavac WrongProgram.mjava
+java -classpath ../third-part/CUP/java-cup-11a.jar:. mjavac SampleProgram.mjava
 if [ $? != 0 ]; then
   exit 1
 fi
