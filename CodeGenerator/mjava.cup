@@ -23,67 +23,72 @@ parser code  {:
     for (int i = 0; i < argv.length; i++) {
       try { System.out.println("\n... Creating Symbol-Table for \""+argv[i]+"\" ...\n");
 	  	s = new Scanner(new FileReader(argv[i]));
-        	mjavac p = new mjavac(s);
-        	p.parse();
-        	System.out.println("Number of errors = " + errors + ".");
-        	System.out.println("Number of warnings = " + warnings + ".");
+        mjavac p = new mjavac(s);
+        p.parse();
+        System.out.println("Number of errors = " + errors + ".");
+        System.out.println("Number of warnings = " + warnings + ".");
 		Type.printTypes();
 	  	first = false;
 	  	second = true;
-        	System.out.println("\n... Generating intermediate code for \""+argv[i]+"\" ...\n");
+        System.out.println("\n... Generating intermediate code for \""+argv[i]+"\" ...\n");
 		code.append("		; ModuleID = '"+argv[i]+".ll'\n\n");
 		code.append("target datalayout = \"e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f32:32:32-f64:32:64-v64:64:64-v128:128:128-a0:0:64-s0:0:64-f80:32:32\"\n");
-		code.append("target triple = \"i686-pc-linux-gnu\"\n\n");
+		code.append("target triple = \"x86_64-apple-macosx12.4.0\"\n\n");
 		code.append("		; Global values\n");
 		Set glob = Env.getGlobals().entrySet();
   		Iterator it = glob.iterator();
-		while(it.hasNext()) { Map.Entry entry = (Map.Entry)it.next();
-					    String key = (String)entry.getKey();
-					    String value = (String)entry.getValue();
-					    int lth = key.length() + 1;
-					    code.append(value+" = internal constant ["+lth+" x i8] "+" c\""+key+"\\00\"\n");
+		while(it.hasNext()) { 
+			Map.Entry entry = (Map.Entry)it.next();
+		    String key = (String)entry.getKey();
+		    String value = (String)entry.getValue();
+			int lth = key.length() + 1;
+		    code.append(value+" = internal constant ["+lth+" x i8] "+" c\""+key+"\\00\"\n");
 		}
 		code.append("\n");
 		code.append("		; External declarations\n");
 		code.append("declare i32 @printf(i8*, ...)\n");
 		code.append("declare i32 @scanf(i8*, ...)\n\n");
-        	s = new Scanner(new FileReader(argv[i]));
+        s = new Scanner(new FileReader(argv[i]));
 	  	p = new mjavac(s);
-        	p.parse();
-        	System.out.println("Number of errors = " + errors + ".");
-        	System.out.println("Number of warnings = " + warnings + ".");
+        p.parse();
+        System.out.println("Number of errors = " + errors + ".");
+        System.out.println("Number of warnings = " + warnings + ".");
 		Type.printTypes();
-	  	if (errors == 0) try { FileOutputStream  fStream;
-   					     PrintWriter  myStream;
-   			      	     fStream = new FileOutputStream(argv[i]+".ll");
-   					     myStream = new PrintWriter(fStream);
-   					     myStream.println(code); 
-   					     myStream.flush();
-   					     myStream.close();
-        				     System.out.println("\nCode written to \""+argv[i]+".ll\".");
-				     }
-				     catch (IOException e) { e.printStackTrace(System.out);
-        			    				     System.exit(1);
-      			     }
+	  	if (errors == 0) 
+			try { 
+				FileOutputStream  fStream;
+				PrintWriter  myStream;
+				fStream = new FileOutputStream(argv[i]+".ll");
+				myStream = new PrintWriter(fStream);
+				myStream.println(code); 
+				myStream.flush();
+				myStream.close();
+				System.out.println("\nCode written to \""+argv[i]+".ll\".");
+			}
+			catch (IOException e) { 
+				e.printStackTrace(System.out);
+				System.exit(1);
+			}
 		else System.out.println("\nNo code produced.");
 		System.out.println("--------------------------------------- (mjavac)");
       }
-      catch (Exception e) { e.printStackTrace(System.out);
-        			    System.exit(1);
+      catch (Exception e) { 
+		e.printStackTrace(System.out);
+        System.exit(1);
       }
     }
   }
   
   public void report_error(String message, Object info) {
-    if (info instanceof String){
-	errors++; 
-      System.err.println("  "+ errors + "==> " + info + " "+ message + 
+    if (info instanceof String) {
+		errors++; 
+      	System.err.println("  "+ errors + "==> " + info + " "+ message + 
 					"\n       Parsing resumed from 2nd token before" + s.current_lexeme()+"\n");
     }
     else {
     	StringBuffer m = new StringBuffer("Error ");
     	if (info instanceof java_cup.runtime.Symbol) 
-     	   m.append( "("+info.toString()+")" );     
+     		m.append( "("+info.toString()+")" );     
     	m.append(" : "+message);   
     	System.err.println(m);
     }
