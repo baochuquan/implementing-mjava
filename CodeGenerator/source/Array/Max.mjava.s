@@ -1,105 +1,115 @@
-	.686
-	.MMX
-	.XMM
-	.model flat
-
-	EXTERN _printf:near
-	EXTERN _scanf:near
-	EXTERN _abort:near
-
-
-_text	SEGMENT PARA 'CODE'
-	public _max
-	ALIGN	16
-_max	proc near
-	sub	ESP, 24
-$label1:
-	mov	EAX, DWORD PTR [ESP + 28]
-	mov	DWORD PTR [ESP + 20], EAX
-	mov	EAX, DWORD PTR [ESP + 32]
-	mov	DWORD PTR [ESP + 16], EAX
-	mov	DWORD PTR [ESP + 4], 0
-	mov	DWORD PTR [ESP], 4294957296
-	jmp	$BB1_4	; label_8
-	ALIGN	16
-$BB1_1:	; label_9
-	mov	EAX, DWORD PTR [ESP]
-	mov	ECX, DWORD PTR [ESP + 4]
-	mov	EDX, DWORD PTR [ESP + 20]
-	cmp	DWORD PTR [EDX + 4*ECX], EAX
-	jle	$BB1_3	; label_14
-$BB1_2:	; label_13
-	mov	EAX, DWORD PTR [ESP + 4]
-	mov	EAX, DWORD PTR [EDX + 4*EAX]
-	mov	DWORD PTR [ESP], EAX
-$BB1_3:	; label_14
-	inc	DWORD PTR [ESP + 4]
-$BB1_4:	; label_8
-	mov	EAX, DWORD PTR [ESP + 16]
-	cmp	DWORD PTR [ESP + 4], EAX
-	jl	$BB1_1	; label_9
-$BB1_5:	; label_10
-	mov	EAX, DWORD PTR [ESP]
-	mov	DWORD PTR [ESP + 8], EAX
-	mov	DWORD PTR [ESP + 12], EAX
-$BB1_6:	; return
-	mov	EAX, DWORD PTR [ESP + 12]
-	add	ESP, 24
+	.section	__TEXT,__text,regular,pure_instructions
+	.build_version macos, 12, 4
+	.intel_syntax noprefix
+	.globl	_max                            ## -- Begin function max
+	.p2align	4, 0x90
+_max:                                   ## @max
+	.cfi_startproc
+## %bb.0:                               ## %entry
+	mov	qword ptr [rsp - 16], rdi
+	mov	dword ptr [rsp - 20], esi
+	mov	dword ptr [rsp - 32], 0
+	mov	dword ptr [rsp - 28], -10000
+	jmp	LBB0_1
+	.p2align	4, 0x90
+LBB0_4:                                 ## %label_14
+                                        ##   in Loop: Header=BB0_1 Depth=1
+	inc	dword ptr [rsp - 32]
+LBB0_1:                                 ## %label_8
+                                        ## =>This Inner Loop Header: Depth=1
+	mov	eax, dword ptr [rsp - 32]
+	cmp	eax, dword ptr [rsp - 20]
+	jge	LBB0_5
+## %bb.2:                               ## %label_9
+                                        ##   in Loop: Header=BB0_1 Depth=1
+	mov	rax, qword ptr [rsp - 16]
+	movsxd	rcx, dword ptr [rsp - 32]
+	mov	ecx, dword ptr [rax + 4*rcx]
+	cmp	ecx, dword ptr [rsp - 28]
+	jle	LBB0_4
+## %bb.3:                               ## %label_13
+                                        ##   in Loop: Header=BB0_1 Depth=1
+	movsxd	rcx, dword ptr [rsp - 32]
+	mov	eax, dword ptr [rax + 4*rcx]
+	mov	dword ptr [rsp - 28], eax
+	jmp	LBB0_4
+LBB0_5:                                 ## %label_10
+	mov	eax, dword ptr [rsp - 28]
+	mov	dword ptr [rsp - 4], eax
+	mov	dword ptr [rsp - 24], eax
+	mov	eax, dword ptr [rsp - 24]
 	ret
-_max	endp
-
-
-	public _main
-	ALIGN	16
-_main	proc near
-	push	EDI
-	push	ESI
-$label2:
-	sub	ESP, 20
-$label3:
-	mov	DWORD PTR [ESP], 20
+	.cfi_endproc
+                                        ## -- End function
+	.globl	_main                           ## -- Begin function main
+	.p2align	4, 0x90
+_main:                                  ## @main
+	.cfi_startproc
+## %bb.0:                               ## %entry
+	push	r15
+	.cfi_def_cfa_offset 16
+	push	r14
+	.cfi_def_cfa_offset 24
+	push	r12
+	.cfi_def_cfa_offset 32
+	push	rbx
+	.cfi_def_cfa_offset 40
+	push	rax
+	.cfi_def_cfa_offset 48
+	.cfi_offset rbx, -40
+	.cfi_offset r12, -32
+	.cfi_offset r14, -24
+	.cfi_offset r15, -16
+	mov	edi, 5
 	call	_malloc
-	mov	DWORD PTR [ESP + 16], 0
-	mov	ESI, EAX
-	lea	EDI, DWORD PTR [ESP + 12]
-	ALIGN	16
-$BB2_1:	; label_36
-	cmp	DWORD PTR [ESP + 16], 4
-	jle	$BB2_4	; label_37
-$BB2_2:	; label_38
-	mov	DWORD PTR [ESP], ESI
-	mov	DWORD PTR [ESP + 4], 5
-	call	_max
-	mov	DWORD PTR [ESP + 4], EAX
-	mov	DWORD PTR [ESP], OFFSET __2E_str2
+	mov	rbx, rax
+	mov	dword ptr [rsp], 0
+	lea	r14, [rip + _.str0]
+	lea	r15, [rip + _.str1]
+	lea	r12, [rsp + 4]
+	cmp	dword ptr [rsp], 4
+	jg	LBB1_3
+	.p2align	4, 0x90
+LBB1_2:                                 ## %label_37
+                                        ## =>This Inner Loop Header: Depth=1
+	mov	rdi, r14
+	xor	eax, eax
 	call	_printf
-$BB2_3:	; return
-	add	ESP, 20
-	pop	ESI
-	pop	EDI
-	ret
-$BB2_4:	; label_37
-	mov	DWORD PTR [ESP], OFFSET __2E_str0
-	call	_printf
-	mov	DWORD PTR [ESP + 4], EDI
-	mov	DWORD PTR [ESP], OFFSET __2E_str1
+	mov	rdi, r15
+	mov	rsi, r12
+	xor	eax, eax
 	call	_scanf
-	mov	EAX, DWORD PTR [ESP + 12]
-	mov	ECX, DWORD PTR [ESP + 16]
-	mov	DWORD PTR [ESI + 4*ECX], EAX
-	inc	DWORD PTR [ESP + 16]
-	jmp	$BB2_1	; label_36
-_main	endp
-_text	ends
+	movsxd	rax, dword ptr [rsp]
+	mov	ecx, dword ptr [rsp + 4]
+	mov	dword ptr [rbx + 4*rax], ecx
+	inc	dword ptr [rsp]
+	cmp	dword ptr [rsp], 4
+	jle	LBB1_2
+LBB1_3:                                 ## %label_38
+	mov	rdi, rbx
+	mov	esi, 5
+	call	_max
+	lea	rdi, [rip + _.str2]
+	mov	esi, eax
+	xor	eax, eax
+	call	_printf
+	add	rsp, 8
+	pop	rbx
+	pop	r12
+	pop	r14
+	pop	r15
+	ret
+	.cfi_endproc
+                                        ## -- End function
+	.section	__TEXT,__const
+_.str2:                                 ## @.str2
+	.asciz	"max:  %d\n"
 
-_data	SEGMENT PARA 'DATA'
-__2E_str2:				; .str2
-	db 'max:  %d',10,0
-__2E_str1:				; .str1
-	db '%d',0
-	ALIGN	16
-__2E_str0:				; .str0
-	db 'Enter an integer value: ',0
-_data	ends
+	.p2align	4                               ## @.str0
+_.str0:
+	.asciz	"Enter an integer value: "
 
-	end
+_.str1:                                 ## @.str1
+	.asciz	"%d"
+
+.subsections_via_symbols

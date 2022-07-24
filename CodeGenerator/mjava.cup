@@ -152,7 +152,7 @@ action code {:
 	  }
 
   	  public void load () {
-		if(locT.endsWith("*")) { parser.code.append("	"+Tmp.nv()+" = load "+locT+" "+locN+"\n");
+		if(locT.endsWith("*")) { parser.code.append("	"+Tmp.nv()+" = load "+locT.substring(0, locT.length()-1)+", "+locT+" "+locN+"\n");
 					   	 locT = locT.replaceFirst("\\*", "");
 					   	 locN = Tmp.lv();
 		}
@@ -352,7 +352,7 @@ literal ::=
 			   if(parser.second) { int i = l.length() + 1;
 			   			     String ary = "["+i+" x i8]";
 			   			     String tmp = Env.getGlobal(l);
-			   			     String loc = "i8* getelementptr ("+ary+"* "+tmp+", i32 0, i32 0)";
+			   			     String loc = "i8* getelementptr ("+ary+", "+ary+"* "+tmp+", i32 0, i32 0)";
 			   			     Symb s = Env.get("String", Env.getRoot());
 			   			     if(s == null) RESULT = new Exp(Type.reference(Type.forwardName("String", parser.s.current_lexeme())), loc, ""); 
 			   			     else RESULT = new Exp(Type.reference(s.getType()), loc, ""); 
@@ -556,7 +556,7 @@ method_declaration ::=
 						     parser.code.append("	br label %return\n");
 						     parser.code.append("return:\n");
 						     if(t == Type.voidtype()) parser.code.append("	ret void\n"); 
-						     else { parser.code.append("	"+Tmp.nv()+" = load "+t.getCode()+"* %retval\n");
+						     else { parser.code.append("	"+Tmp.nv()+" = load "+t.getCode()+", "+t.getCode()+"* %retval\n");
 						     	    parser.code.append("	ret "+t.getCode()+" "+Tmp.lv()+"\n");
 						     }
 						     parser.code.append("}\n\n");
@@ -742,7 +742,7 @@ constructor_declaration ::=
 			{: if(parser.second) { parser.code.append("		; constructor_declaration\n");
 					       parser.code.append("	br label %return\n");
 					       parser.code.append("return:\n");
-					       parser.code.append("	%retval = load "+t.getCode()+"* %retval\n");
+					       parser.code.append("	%retval = load "+t.getCode()+", "+t.getCode()+"* %retval\n");
 						     parser.code.append("	ret "+t.getCode()+" %retval\n");
 						     parser.code.append("}\n\n");
 			   } 
@@ -1001,7 +1001,7 @@ return_statement ::=
 																			  e.load();
 									  						 				  String l = e.widen(mt);
 																			  parser.code.append("	store "+t+" "+l+", "+t+"*"+" %tmp\n");
-																			  parser.code.append("	"+Tmp.nv()+" = load "+t+"*"+" %tmp\n");
+																			  parser.code.append("	"+Tmp.nv()+" = load "+t+", "+t+"*"+" %tmp\n");
 																			  parser.code.append("	store "+t+" "+Tmp.lv()+", "+t+"*"+" %retval\n");
 																			  parser.code.append("	br label %return\n");
 																 }
@@ -1012,7 +1012,7 @@ return_statement ::=
 								parser.code.append("		; return_statement\n");
 								e.load();
 								parser.code.append("	store "+e.locT+" "+e.locN+", "+t+"*"+" %tmp\n");
-								parser.code.append("	"+Tmp.nv()+" = load "+t+"*"+" %tmp\n");
+								parser.code.append("	"+Tmp.nv()+" = load "+t+", "+t+"*"+" %tmp\n");
 								parser.code.append("	store "+t+" "+Tmp.lv()+", "+t+"*"+" %retval\n");
 								parser.code.append("	br label %return\n");	
 						     }
@@ -1146,7 +1146,7 @@ array_creation_expression ::=
 		   				   }
 			   			   else try { int s = Integer.parseInt(e2.locN);
 								  parser.code.append("		; array_creation\n");									
-  								  parser.code.append("	"+Tmp.nv()+" = malloc ["+e2.locN+" x "+t1.getCode()+"]\n");
+  								  parser.code.append("	"+Tmp.nv()+" = call "+t1.getCode()+"* @malloc("+t1.getCode()+" "+e2.locN+")\n");
 								  Type t = Type.array(s, t1);
 								  String c = "["+s+" x "+t1.getCode()+"]*";
 							    	  RESULT = new Exp(t, c, Tmp.lv());
@@ -1244,13 +1244,13 @@ method_invocation ::=
  	    																			   e.locT = t;
 																				   e.locN = Tmp.lv();
 																    }
-																    else if(!e.locT.startsWith("i8* getelementptr")) { parser.code.append("	"+Tmp.nv()+" = load "+e.locT+" "+e.locN+"\n");
+																    else if(!e.locT.startsWith("i8* getelementptr")) { parser.code.append("	"+Tmp.nv()+" = load "+e.locT.substring(0, e.locT.length()-1)+", "+e.locT+" "+e.locN+"\n");
 																			         				     	    e.locT = e.locT.replaceFirst("\\*", "");
 																								     	    e.locN = Tmp.lv();
 											    						   }
 								}
-								if(sn.name.equals("printf")) parser.code.append("	"+Tmp.nv()+" = call i32 (i8*, ...)* @printf(");
-						   		else if(sn.name.equals("scanf")) parser.code.append("	"+Tmp.nv()+" = call i32 (i8*, ...)* @scanf(");
+								if(sn.name.equals("printf")) parser.code.append("	"+Tmp.nv()+" = call i32 (i8*, ...) @printf(");
+						   		else if(sn.name.equals("scanf")) parser.code.append("	"+Tmp.nv()+" = call i32 (i8*, ...) @scanf(");
 							  	     else { Type t1 = sn.cs.getType();
 				    						if(!t1.isMethod()) { parser.sem_error(""+t1, "NOT A METHOD");
 				    		             			   		   RESULT = new Exp(Type.errortype(), "", "");
@@ -1348,7 +1348,7 @@ array_access ::=
 					  	   		     else { parser.code.append("		; array_access\n");
 										String locT = sn.cs.getLocT();
 										String locN = sn.cs.getLocN();
-										if(locT.endsWith("**")) { parser.code.append("	"+Tmp.nv()+" = load "+locT+" "+locN+"\n");
+										if(locT.endsWith("**")) { parser.code.append("	"+Tmp.nv()+" = load "+locT.substring(0, locT.length()-1)+", "+locT+" "+locN+"\n");
 														  locT = locT.replaceFirst("\\*", "");
 														  locN = Tmp.lv();
 					   	 								  sn.cs.putLocT(locT);
@@ -1356,8 +1356,9 @@ array_access ::=
 										}
 										e.load();
 										String index = Tmp.lv();
-										if(locT.endsWith("]*")) parser.code.append("	"+Tmp.nv()+" = getelementptr "+locT+" "+locN+", i32 0, i32 "+index+"\n");
-										else parser.code.append("	"+Tmp.nv()+" = getelementptr "+locT+" "+locN+", i32 "+index+"\n");
+										if(locT.endsWith("]*")) parser.code.append("	"+Tmp.nv()+" = getelementptr "+locT.substring(0, locT.length()-1)+", "+locT+" "+locN+", i32 0, i32 "+index+"\n");
+										else if(locT.endsWith("*")) parser.code.append("	"+Tmp.nv()+" = getelementptr "+locT.substring(0, locT.length()-1)+", "+locT+" "+locN+", i32 "+index+"\n");
+										else parser.code.append("	"+Tmp.nv()+" = getelementptr "+locT.substring(0, locT.length()-1)+", "+locT+" "+locN+", i32 "+index+"\n");
 										Type t = ((Array)t1).getBase();
 										RESULT = new Exp(t, t.getCode()+"*", Tmp.lv());
 								     }

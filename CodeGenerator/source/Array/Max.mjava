@@ -18,11 +18,13 @@ public class Array{
 	int i, n;
   	a = new int[5];
   	i = 0;
-  	while(i < 5) { printf ("Enter an integer value: ");
-		     	   scanf ("%d", &n);
-		     	   a[i] = n;
-		     	   i = i +1;
+  	while(i < 5) { 
+		//printf ("Enter an integer value: ");
+		//scanf ("%d", &n);
+		n = 10;
+		a[i] = n;
+		i = i +1;
   	}
-  	printf ("max:  %d\n", max(a, 5));
+  	//printf ("max:  %d\n", max(a, 5));
   }
 }
